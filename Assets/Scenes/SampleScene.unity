@@ -1069,7 +1069,7 @@ GameObject:
   - component: {fileID: 2088308130}
   - component: {fileID: 2088308135}
   m_Layer: 7
-  m_Name: Ra, The Sun God
+  m_Name: Boss
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1197,7 +1197,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a97cbc249eee8644bdad6893559f9c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Agent>k__BackingField: {fileID: 2088308130}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
