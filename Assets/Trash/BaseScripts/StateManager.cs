@@ -11,10 +11,6 @@ public abstract class StateManager<EState> : MonoBehaviour where EState : Enum
 
     protected bool IsTransitioningState = false;
 
-    private void Awake()
-    {
-    }
-
     private void Start()
     {
         CurrentState.EnterState();
