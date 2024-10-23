@@ -27,7 +27,10 @@ public class BossChaseState : BossBaseState
         {
             bossManager.SwitchState(bossManager.AttackState);
         }
+    }
 
+    public override void UpdateStateFixed(BossStateManager bossManager)
+    {
 
     }
 

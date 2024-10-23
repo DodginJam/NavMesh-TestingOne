@@ -19,6 +19,11 @@ public class BossIdleState : BossBaseState
         }
     }
 
+    public override void UpdateStateFixed(BossStateManager bossManager)
+    {
+
+    }
+
     public override void ExitState(BossStateManager bossManager)
     {
 

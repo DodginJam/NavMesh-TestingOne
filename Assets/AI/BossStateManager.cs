@@ -5,13 +5,20 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
+/// <summary>
+/// The manager of the bosses states. Contains references to all state classes, and set's one active at any given time. All state logic is called in here via polymorphic methods.
+/// </summary>
 public class BossStateManager : MonoBehaviour
 {
+    // Singleton methods ensures only one BossStateManager runs at any given time.
     static public BossStateManager BossStateManagerSingleton
     { get; private set; }
 
-    private BossBaseState CurrentState
-    { get; set; }
+    // Active state that the boss is in, determining its behaviour as defined in the respective state classes.
+    public BossBaseState CurrentState
+    { get; private set; }
+
+    // Boss States Variable holding reference to respective available states.
     public BossIdleState IdleState
     { get; private set; } = new BossIdleState();
     public BossChaseState ChaseState
@@ -19,6 +26,7 @@ public class BossStateManager : MonoBehaviour
     public BossAttackState AttackState
     { get; private set; } = new BossAttackState();
 
+    // Variables for reference within multiple different states.
     public NavMeshAgent Agent
     { get; private set; }
     public Transform PlayerTarget
@@ -28,6 +36,7 @@ public class BossStateManager : MonoBehaviour
 
     private void Awake()
     {
+        // Singleton methods ensures only one BossStateManager runs at any given time.
         if (BossStateManagerSingleton != null)
         {
             Destroy(this.gameObject);
@@ -38,23 +47,28 @@ public class BossStateManager : MonoBehaviour
             DontDestroyOnLoad(this.gameObject);
         }
 
+        // Retreving references to components.
         Agent = GetComponent<NavMeshAgent>();
     }
 
-    // Start is called before the first frame update
     void Start()
     {
-        SwitchState(IdleState);
+        CurrentState = IdleState;
     }
 
-    // Update is called once per frame
     void Update()
     {
         CurrentState.UpdateState(this);
     }
 
+    private void FixedUpdate()
+    {
+        CurrentState.UpdateStateFixed(this);
+    }
+
     public void SwitchState(BossBaseState newState)
     {
+        CurrentState.ExitState(this);
         CurrentState = newState;
         CurrentState.EnterState(this);
     }

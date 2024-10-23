@@ -8,10 +8,21 @@ public class BossAttackState : BossBaseState
     { get; private set; } = 1f;
     public float AttackCountDownTimer
     { get; private set; } = 0.0f;
+    public Rigidbody Weapon
+    { get; private set; }
+    public Vector3 WeaponPositionDefault
+    { get; private set; }
+    public Quaternion WeaponRotationDefault
+    { get; private set; }
 
     public override void EnterState(BossStateManager bossManager)
     {
-
+        if (Weapon == null)
+        {
+            Weapon = bossManager.transform.Find("Weapon").GetComponent<Rigidbody>();
+            WeaponPositionDefault = Weapon.transform.position;
+            WeaponRotationDefault = Weapon.transform.rotation;
+        }
     }
 
     public override void UpdateState(BossStateManager bossManager)
@@ -24,17 +35,17 @@ public class BossAttackState : BossBaseState
 
         AttackCountDownTimer -= Time.deltaTime;
 
-        Vector3 distanceToPlayer = bossManager.transform.position - bossManager.PlayerTarget.position;
+        Vector3 distanceToPlayer =  bossManager.PlayerTarget.position - bossManager.transform.position;
         float lengthToPlayer = (distanceToPlayer).magnitude;
 
         if (lengthToPlayer <= bossManager.DistanceToPlayerForAttack)
         {
-            bossManager.Agent.SetDestination(bossManager.transform.position);
-            // bossManager.transform.rotation = Vector3.Slerp();
+            bossManager.transform.rotation = RotateToTarget(bossManager.transform, distanceToPlayer, 5.0f);
 
             if (AttackCountDownTimer <= 0)
             {
-                AttackPlayer();
+                // Shoudl switch to a new attack recovery state instead.
+                AttackPlayer(bossManager);
             }
         }
         else
@@ -42,15 +53,30 @@ public class BossAttackState : BossBaseState
             bossManager.SwitchState(bossManager.ChaseState);
         }
     }
+    public override void UpdateStateFixed(BossStateManager bossManager)
+    {
+
+    }
 
     public override void ExitState(BossStateManager bossManager)
     {
 
     }
 
-    void AttackPlayer()
+    void AttackPlayer(BossStateManager bossManager)
     {
+        Rigidbody weaponRigidBody = Weapon;
+
+        // Either attack with a torque effect for a phyics based hit, starting be turning off kinematic then turning it on again once
+        //weaponRigidBody.AddTorque();
+
         Debug.Log("Damage Dealt to Player");
         AttackCountDownTimer = AttackTimerConstant;
+    }
+
+    Quaternion RotateToTarget(Transform transformToRotate, Vector3 distanceVectorToTarget, float rotateSpeed)
+    {
+
+        return Quaternion.Slerp(transformToRotate.transform.rotation, Quaternion.LookRotation(new Vector3(distanceVectorToTarget.x, 0, distanceVectorToTarget.z).normalized), rotateSpeed * Time.deltaTime);
     }
 }
