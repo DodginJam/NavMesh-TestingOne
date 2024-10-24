@@ -19,7 +19,7 @@ public class BossAttackState : BossBaseState
     {
         if (Weapon == null)
         {
-            Weapon = bossManager.transform.Find("Weapon").GetComponent<Rigidbody>();
+            Weapon = bossManager.transform.Find("RotationPoint/Weapon").GetComponent<Rigidbody>();
             WeaponPositionDefault = Weapon.transform.position;
             WeaponRotationDefault = Weapon.transform.rotation;
         }
