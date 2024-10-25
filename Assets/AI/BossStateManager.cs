@@ -33,6 +33,11 @@ public class BossStateManager : MonoBehaviour
     { get; set; }
     public float DistanceToPlayerForAttack
     { get; private set; } = 2f;
+    public float AttackDamage
+    { get; private set; } = 20.0f;
+
+    [field: SerializeField]
+    public AnimationClip AttackAnimation { get; private set; }
 
     private void Awake()
     {

@@ -23,6 +23,8 @@ public class BossAttackState : BossBaseState
             WeaponPositionDefault = Weapon.transform.position;
             WeaponRotationDefault = Weapon.transform.rotation;
         }
+
+
     }
 
     public override void UpdateState(BossStateManager bossManager)
