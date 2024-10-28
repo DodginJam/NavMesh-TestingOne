@@ -6,7 +6,7 @@ public class BossAttackState : BossBaseState
 {
     public override void EnterState(BossStateManager bossManager)
     {
-        bossManager.BossAnimator.SetTrigger("Attack");
+        bossManager.BossAnimator.SetTrigger("AttackReady");
         bossManager.Agent.SetDestination(bossManager.transform.position - ((bossManager.transform.position - bossManager.PlayerTarget.position) / 2).normalized);
     }
 
@@ -24,6 +24,10 @@ public class BossAttackState : BossBaseState
         if (lengthToPlayer <= bossManager.DistanceForAttack)
         {
             bossManager.transform.rotation = RotateToTarget(bossManager.transform, distanceToPlayer, 5.0f);
+            if (true) // rotation is within right angle towards player.
+            {
+                bossManager.BossAnimator.SetTrigger("AttackStart");
+            }
         }
         else
         {
@@ -37,7 +41,8 @@ public class BossAttackState : BossBaseState
 
     public override void ExitState(BossStateManager bossManager)
     {
-
+        // Ensure that no matter the state of the current weapon, on exit of the attack state it will never have it's trigger activated.
+        bossManager.GetComponentInChildren<DealDamage>().SetWeaponTrigger(false);
     }
 
     Quaternion RotateToTarget(Transform transformToRotate, Vector3 distanceVectorToTarget, float rotateSpeed)
