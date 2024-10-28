@@ -5,14 +5,7 @@ using UnityEngine;
 
 public class AttackEvent : MonoBehaviour
 {
-    public delegate void MethodToCall(float a);
-    public event MethodToCall OnAnimationEvent;
-
     public BossStateManager BossStateManagerScript
-    { get; private set; }
-    public float AttackDamage
-    { get; private set; }
-    public Animation AnimationPlayer
     { get; private set; }
 
     private void Awake()
@@ -22,17 +15,12 @@ public class AttackEvent : MonoBehaviour
 
     void Start()
     {
-        OnAnimationEvent += HandleAnimationEvent;
+
     }
 
     // Update is called once per frame
     void Update()
     {
 
-    }
-
-    private void HandleAnimationEvent(float attackDamageModifier)
-    {
-        AnimationPlayer.Play("Swing_Top");
     }
 }

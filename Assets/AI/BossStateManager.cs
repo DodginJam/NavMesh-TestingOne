@@ -31,13 +31,20 @@ public class BossStateManager : MonoBehaviour
     { get; private set; }
     public Transform PlayerTarget
     { get; set; }
-    public float DistanceToPlayerForAttack
-    { get; private set; } = 2f;
+    public Animator BossAnimator
+    { get; private set; }
+    public float DistanceToDetect
+    { get; private set; } = 45.0f;
+    public float DistanceForAttack
+    { get; private set; } = 5.0f;
     public float AttackDamage
     { get; private set; } = 20.0f;
 
+    // Debugging variables.
+    [field: SerializeField] public string CurrentStateDisplay
+    { get; private set; }
     [field: SerializeField]
-    public AnimationClip AttackAnimation { get; private set; }
+    public float DistanceToTarget { get; private set; }
 
     private void Awake()
     {
@@ -54,6 +61,7 @@ public class BossStateManager : MonoBehaviour
 
         // Retreving references to components.
         Agent = GetComponent<NavMeshAgent>();
+        BossAnimator = GetComponent<Animator>();
     }
 
     void Start()
@@ -64,6 +72,10 @@ public class BossStateManager : MonoBehaviour
     void Update()
     {
         CurrentState.UpdateState(this);
+
+        // Deugging Information updated
+        CurrentStateDisplay = CurrentState.ToString();
+        DistanceToTarget = (transform.position - PlayerTarget.position).magnitude;
     }
 
     private void FixedUpdate()

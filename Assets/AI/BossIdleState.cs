@@ -6,7 +6,8 @@ public class BossIdleState : BossBaseState
 {
     public override void EnterState(BossStateManager bossManager)
     {
-
+        bossManager.Agent.SetDestination(bossManager.transform.position);
+        bossManager.BossAnimator.SetTrigger("Idle");
     }
 
     public override void UpdateState(BossStateManager bossManager)
@@ -15,7 +16,12 @@ public class BossIdleState : BossBaseState
 
         if (bossManager.PlayerTarget != null)
         {
-            bossManager.SwitchState(bossManager.ChaseState);
+            float distanceToPlayer = (bossManager.transform.position - bossManager.PlayerTarget.position).magnitude;
+
+            if (distanceToPlayer < bossManager.DistanceToDetect)
+            {
+                bossManager.SwitchState(bossManager.ChaseState);
+            }
         }
     }
 
